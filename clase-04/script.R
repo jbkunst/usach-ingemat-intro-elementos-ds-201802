@@ -9,7 +9,7 @@ library(readxl)
 # download.file(url, basename(url))
 
 # arbirlo y cambiarlo de extension
-data <- read_xlsx("~/../Downloads/antenas.xlsx")
+data <- read_xlsx("clase-04/data/antenas.xlsx")
 
 # uff! al fin! ------------------------------------------------------------
 glimpse(data)
@@ -95,8 +95,6 @@ a
 
 
 # a mapear?! --------------------------------------------------------------
-
-
 glimpse(data)
 data <- data %>% 
   mutate(
@@ -113,10 +111,10 @@ library(leaflet)
 
 glimpse(data)
 
+data_rm <- data %>% 
+  filter(Región == "RM")
 
-m <- leaflet() %>%
-  addTiles() %>%  # Add default OpenStreetMap map tiles
-  addMarkers(lng=174.768, lat=-36.852, popup="The birthplace of R")
-m  # Print
+leaflet(data = data_rm) %>% 
+  addTiles() %>%
+  addMarkers(~lon, ~lat, clusterOptions = markerClusterOptions())
 
-install.packages(c("httpuv"))
