@@ -1,15 +1,12 @@
-# Clase 04
+# Clase 05
 
-## Exploración
+## Un poco de árboles
 
-- Seguir practicando dplyr
-- Visualizando
-- AED (Análsis exploratorio de datos)
+- Hay que partir por algo
+- Que son? Para que sirven? Como se usan?
 
 ## Links
 
-- http://datos.gob.cl/dataset/33293
-- https://github.com/justinelliotmeyers/official_chile_2017_census_boundary_shapefile
-- http://lmgtfy.com/?q=r+function+degree+minutes+seconds+to+degree+decimal
-- https://www.rdocumentation.org/packages/biogeo/versions/1.0/topics/dms2dd
-- https://rstudio.github.io/leaflet/markers.html
+- http://www.r2d3.us/visual-intro-to-machine-learning-part-1/
+- https://cran.r-project.org/web/packages/partykit/vignettes/constparty.pdf
+
