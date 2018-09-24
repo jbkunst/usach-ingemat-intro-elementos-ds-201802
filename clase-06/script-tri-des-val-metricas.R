@@ -48,4 +48,15 @@ ddes <- chileancredit %>%
   filter(para_donde_se_va == "para aka")
 # 4943
 
+# listocos para hacer nuestro arbol/modelo --------------------------------
+mod <- ctree(fgood ~ ., data = ddes)
+# quiero crear un arbol (ctree) 
+# explicando fgood con todas 
+# las variables (para eso el '.'), y usando como
+# data de generacion de este arbol 'ddes'
+# Creando el objeto/arbol mod 
+dir.create("clase-06/data")
+saveRDS(chileancredit, "clase-06/data/chileancredit.rds")
+
+readRDS("https://github.com/jbkunst/usach-ingemat-intro-elementos-ds-201802/blob/master/clase-06/data/chileancredit.rds?raw=true")
 

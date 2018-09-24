@@ -7,6 +7,11 @@
 
 - chileancredit del paquete [smbinning](https://cran.r-project.org/web/packages/smbinning/)
 - Descargad de acad https://github.com/cran/smbinning/tree/master/data
+- O leer como:
+
+```r
+chileancredit <- readRDS(gzcon(url("https://github.com/jbkunst/usach-ingemat-intro-elementos-ds-201802/blob/master/clase-06/data/chileancredit.rds?raw=true")))
+```
 
 ## Paquetes
 
