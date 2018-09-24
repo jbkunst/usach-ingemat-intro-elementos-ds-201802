@@ -2,11 +2,14 @@
 library(tidyverse)    # manipular y graficar
 library(partykit)     # Arboles
 library(ModelMetrics) # metricias de performance
-library(smbinning)    # Datos
-
+# library(smbinning)    # Datos
 # install.packages("smbinning") # chileno
 
-# chileandcredit<- readRDS("https://github.com/cran/smbinning/blob/master/data/chileancredit.RData?raw=true")
+chileancredit <- readRDS(gzcon(url("https://github.com/jbkunst/usach-ingemat-intro-elementos-ds-201802/blob/master/clase-06/data/chileancredit.rds?raw=true")))
+chileancredit <- tbl_df(chileancredit)
+
+chileancredit %>% 
+  count(fgood)
 
 # datos -------------------------------------------------------------------
 data("chileancredit")
@@ -55,8 +58,64 @@ mod <- ctree(fgood ~ ., data = ddes)
 # las variables (para eso el '.'), y usando como
 # data de generacion de este arbol 'ddes'
 # Creando el objeto/arbol mod 
-dir.create("clase-06/data")
-saveRDS(chileancredit, "clase-06/data/chileancredit.rds")
 
-readRDS("https://github.com/jbkunst/usach-ingemat-intro-elementos-ds-201802/blob/master/clase-06/data/chileancredit.rds?raw=true")
+# M: cannot handle objects of class ‘Date’
+# R: Ok!
+ddes <- ddes %>% 
+  select(-period)
+
+mod <- ctree(fgood ~ ., data = ddes)
+
+# M: cannot handle objects of class ‘character’
+# R: ok ok...
+glimpse(ddes)
+
+ddes %>% 
+  count(para_donde_se_va)
+
+ddes <- ddes %>% 
+  select(-para_donde_se_va)
+
+# Y nuevamente...
+mod <- ctree(fgood ~ ., data = ddes)
+
+mod
+
+# Mmm... es medio dificl de ver que pasa con
+# solo 'mod'
+# R: plot it!!!!!
+plot(mod)
+
+plot(mod, gp = gpar(fontsize = 5))
+
+# la 4ta es la venicida. Espero!
+
+ddes <- ddes %>% 
+  mutate(fgood = as.factor(fgood))
+
+# P: Que es un factor:
+# R: Es como una variable categorica, 
+# con categorias definidas/fijas.
+
+mod <- ctree(fgood ~ ., data = ddes)
+
+mod
+
+plot(mod,  gp = gpar(fontsize = 5))
+
+plot(
+  ctree(
+    fgood~ .,
+    data = ddes,
+    control = ctree_control(maxdepth = 3)
+    )
+  )
+ddes %>% mutate(fgood = fgood + rnorm(4943, sd = 0.1)) %>% tbl_df()
+
+
+boxplot(rnorm(1000), horizontal = TRUE)
+boxplot(rexp(1000), horizontal = TRUE)
+boxplot(rbinom(10000, 1, p = 0.5))
+
+
 
