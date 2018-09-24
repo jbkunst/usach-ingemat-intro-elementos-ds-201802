@@ -6,6 +6,7 @@
 ## Datos
 
 - chileancredit del paquete [smbinning](https://cran.r-project.org/web/packages/smbinning/)
+- Descargad de acad https://github.com/cran/smbinning/tree/master/data
 
 ## Paquetes
 

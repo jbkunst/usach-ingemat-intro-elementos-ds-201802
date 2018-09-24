@@ -81,6 +81,9 @@ tri <- ctree(bm ~ ., data = d)
 plot(tri, gp = gpar(fontsize = 10)) 
 
 # oops, muy profundo
-tri <- ctree(bm ~ ., data = d, control = ctree_control(maxdepth = 4))
-plot(tri, gp = gpar(fontsize = 10)) 
+tri <- ctree(bm ~ ., data = d, control = ctree_control(maxdepth = 3))
+plot(tri, gp = gpar(fontsize = 9)) 
 
+d %>% 
+  count(bm) %>% 
+  mutate(p = n/sum(n))
