@@ -13,6 +13,8 @@
 chileancredit <- readRDS(gzcon(url("https://github.com/jbkunst/usach-ingemat-intro-elementos-ds-201802/blob/master/clase-06/data/chileancredit.rds?raw=true")))
 ```
 
+Gracias a http://lmgtfy.com/?q=read+rds+from+url
+
 ## Paquetes
 
 - [partykit](https://cran.r-project.org/web/packages/partykit/)
