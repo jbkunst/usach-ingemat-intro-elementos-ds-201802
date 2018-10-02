@@ -47,6 +47,7 @@ table(para_donde_se_va)
 chileancredit <- chileancredit %>% 
   mutate(para_donde_se_va = para_donde_se_va)
 
+# ddes: Data de DESarrollo
 ddes <- chileancredit %>% 
   filter(para_donde_se_va == "para aka")
 # 4943
