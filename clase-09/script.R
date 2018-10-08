@@ -1,13 +1,14 @@
-# # La madre de todas las regresiones ---------------------------------------
-# a <- 8
-# b <- 3
-# 
-# N <- 30
-# 
-# data <- data_frame(
-#   x = runif(N, 0, 10),
-#   y = a + x * b + 2 * rnorm(N)
-# )
+library(tidyverse)
+# La madre de todas las regresiones ---------------------------------------
+a <- 8
+b <- 3
+
+N <- 30
+
+data <- data_frame(
+  x = runif(N, 0, 10),
+  y = a + x * b + 2 * rnorm(N)
+)
 
 ggplot(data) +
   geom_point(aes(x, y))
@@ -145,6 +146,8 @@ ggplot() +
 data
 # Linear Models
 mod <- lm(y ~ x, data = data)
+coefs <- mod$coefficients
+coefs
 
 ggplot() +
   geom_point(aes(a, b), data = modelos) +
@@ -152,6 +155,29 @@ ggplot() +
   geom_point(aes(x = 8.547, y = 2.782), color = "red", size = 5) 
 
 
+
+# equivalentes
 ggplot() +
   geom_point(aes(x, y), data = data) +
-  geom_abline(slope = 2.782, intercept = 8.547, color = "red", size = 4)
+  geom_abline(slope = coefs[2], intercept = coefs[1], color = "red", alpha = 0.3, size = 4) +
+  geom_smooth(aes(x, y), data = data, se = FALSE, method = "lm") 
+
+# la historia de que no quero olvidarme de mi primer amor
+modeloswenowenoswenosfinalfinal <- modeloswenowenoswenos %>% 
+  head(1)
+modeloswenowenoswenosfinalfinal
+
+ggplot() +
+  geom_point(aes(x, y), data = data) +
+  geom_abline(slope = coefs[2], intercept = coefs[1], color = "blue",
+              alpha = 0.3, size = 2) +
+  geom_abline(aes(slope = b, intercept = a),
+              data = modeloswenowenoswenosfinalfinal,
+              color = "pink", size = 2)
+
+
+
+
+
+
+
