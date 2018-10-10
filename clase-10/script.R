@@ -3,17 +3,18 @@ library(tidyverse)
 
 
 # lo mismo de ayer --------------------------------------------------------
+# comentarios # CTRL + SHIFT + C 
 set.seed(123)
 data(flights, package = "nycflights13")
-flights <- flights %>% 
-  filter(!is.na(air_time), !is.na(distance)) %>% 
-  filter(distance < quantile(distance, .99)) %>% 
-  sample_n(5000) %>% 
-  arrange(distance) %>% 
+flights <- flights %>%
+  filter(!is.na(air_time), !is.na(distance)) %>%
+  filter(distance < quantile(distance, .99)) %>%
+  sample_n(5000) %>%
+  arrange(distance) %>%
   mutate(
     distance = distance * 1.60934,
     air_time = air_time / 60
-  ) %>% 
+  ) %>%
   select(distance, air_time, everything())
 
 flights2 <- flights %>% 
@@ -46,7 +47,6 @@ y <- c(1, 5.5)
 m <- (y[2]-y[1])/(x[2]-x[1])
 b <- -m*x[1] + y[1]
 
-
 modelojo <- data_frame(b0 = b, b1 = m, tipo = "ojo")  
 modelojo
 
@@ -62,7 +62,6 @@ modelos <- bind_rows(model, modelojo)
 
 tail(modelos)
 
-
 ecm <- function(b0, b1) {
   # b0 <- 0.3; b1 <- 0.002
   ecmdf <- flights2 %>% 
@@ -72,7 +71,7 @@ ecm <- function(b0, b1) {
       e_i2 = e_i ^ 2
     ) %>% 
     summarise(
-      ecm = sum(e_i2)
+      ecm = mean(e_i2)
     )
   
   ecmdf$ecm
@@ -104,7 +103,6 @@ ggplot(flights2) +
   geom_point(aes(distance, air_time), alpha = 0.25) +
   scale_color_viridis_c(direction = -1)
 
-
 modelos %>%
   arrange(error_cuad)
 
@@ -122,6 +120,7 @@ ggplot(modelos) +
 flights2
 modelojo
 mod <- lm(air_time ~ distance, data = flights2)
+mod
 coefficients(mod)
 
 gg + 
@@ -129,7 +128,7 @@ gg +
 
 modelos %>%
   arrange(error_cuad) %>% 
-  head(1)
+  head(5)
 
 ecm(coefficients(mod)[1], coefficients(mod)[2])
 
@@ -138,21 +137,52 @@ mod
 summary(mod)
 
 
-
 # bases -------------------------------------------------------------------
 set.seed(123)
 flights <- flights %>% 
   sample_n(nrow(flights))
 
-head(1:10,  3)
-head(1:10,  2)
-
 flights_des <- head(flights, 2500)
-flights_val <- head(flights, 2500)
+flights_val <- tail(flights, 2500)
 
 # juegue ------------------------------------------------------------------
 mi_mod <- lm(air_time ~ distance + month, data = flights_des)
 
-(mi_mod$residuals)2
+ggplot(flights_des, aes(distance, air_time)) +
+  geom_point(alpha = 0.5) +
+  geom_smooth(method = "lm")
+
+ggplot(flights_des, aes(distance, air_time)) +
+  geom_point(alpha = 0.2, size = 1) +
+  geom_smooth(
+    aes(group = factor(month), color = month),
+    method = "lm", se = FALSE
+    ) +
+  scale_color_viridis_c() 
+
+
+# ajusto mi modelo super guay
+mi_mod <- lm(air_time ~ distance, data = flights_des)
+
+
+flights_des %>% 
+  # calculo lo que da mi modelo
+  mutate(pred = predict(mi_mod, newdata = flights_des)) %>% 
+  # calculo error
+  mutate(error = air_time - pred) %>% 
+  # promedio de ese error al cuadrado
+  summarise(mean(error^2))
+
+flights_val %>% 
+  # calculo lo que da mi modelo
+  mutate(pred = predict(mi_mod, newdata = flights_val)) %>% 
+  # calculo error
+  mutate(error = air_time - pred) %>% 
+  # promedio de ese error al cuadrado
+  summarise(mean(error^2))
+
+
+
+
 
 
