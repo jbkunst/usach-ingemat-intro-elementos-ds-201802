@@ -162,8 +162,8 @@ ggplot(flights_des, aes(distance, air_time)) +
 
 
 # ajusto mi modelo super guay
-mi_mod <- lm(air_time ~ distance, data = flights_des)
-
+mi_mod <- lm(air_time ~ distance + factor(month) + factor(day), data = flights_des)
+summary(mi_mod)
 
 flights_des %>% 
   # calculo lo que da mi modelo
@@ -180,9 +180,41 @@ flights_val %>%
   mutate(error = air_time - pred) %>% 
   # promedio de ese error al cuadrado
   summarise(mean(error^2))
+# 0.0433 d 
+# 0.0362 d + month
+# 0.0365 d + month + day
 
 
 
+library(partykit)
+mi_arb <- ctree(air_time ~ distance + month, 
+                control = ctree_control(maxdepth = 4),
+                data = flights_des)
+plot(mi_arb)
 
+
+mi_arb <- ctree(air_time ~ distance , 
+                control = ctree_control(maxdepth = 3),
+                data = flights_des)
+plot(mi_arb)
+flights_des %>% 
+  # calculo lo que da mi modelo
+  mutate(pred = predict(mi_arb, newdata = flights_des)) %>% 
+  # calculo error
+  mutate(error = air_time - pred) %>% 
+  # promedio de ese error al cuadrado
+  summarise(mean(error^2))
+
+flights_val %>% 
+  # calculo lo que da mi modelo
+  mutate(pred = predict(mi_arb, newdata = flights_val)) %>% 
+  # calculo error
+  mutate(error = air_time - pred) %>% 
+  # promedio de ese error al cuadrado
+  summarise(mean(error^2))
+# 0.0433 d 
+# 0.0362 d + month
+# 0.0365 d + month + day
+#  0.0395 
 
 
