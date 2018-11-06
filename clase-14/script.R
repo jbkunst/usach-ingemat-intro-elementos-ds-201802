@@ -1,7 +1,7 @@
 library(tidyverse)
 library(lubridate)
 
-empresa <- "CHILE"
+empresa <- "FALABELLA"
 # Para que hacemos lo anterior? 
 # Intentar trabajar con valores genericos
 
