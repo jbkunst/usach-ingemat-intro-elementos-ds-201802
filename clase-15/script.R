@@ -3,7 +3,6 @@ library(tidyverse)
 data <- read_csv(unz("clase-15/data/all.zip", "train.csv"))
 data
 
-
 dmin <- data %>% 
   sample_n(9)
 
@@ -48,10 +47,9 @@ dtrain <- data %>%
   select(-muestra) %>% 
   mutate(label = factor(label))
 
-library(randomForest)
 library(ranger)
 
-mod <- ranger(label ~ ., data = dtrain, num.trees = 500, verbose = TRUE, num.threads = 3)
+mod <- ranger(label ~ ., data = dtrain, num.trees = 500, verbose = TRUE, num.threads = 3, importance = "impurity")
 mod
 
 dtest <- data %>% 
@@ -65,6 +63,8 @@ dtest <- dtest %>%
 
 dtest <- dtest %>% 
   select(pred, label, everything())
+
+dtest %>% select(1:5)
 
 dmet <- dtest %>% 
   count(label, pred) %>% 
@@ -84,4 +84,17 @@ dmet %>%
   geom_tile(aes(as.factor(label), pred, fill = p)) +
   scale_fill_viridis_c(option = "B")
 
+imp <- importance(mod)
 
+dfimp <- data_frame(
+  pixel = names(imp),
+  imp = as.numeric(imp),
+  x = rep(1:28, times = 28),
+  y = rep(28:1, each = 28)
+  )
+
+ggplot(dfimp) +
+  geom_tile(aes(x, y, fill = imp)) +
+  scale_fill_viridis_c(option = "B") +
+  theme_void() +
+  theme(legend.position = "none")
