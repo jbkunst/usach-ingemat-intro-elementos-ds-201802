@@ -1,4 +1,5 @@
 library(tidyverse)
+library(scales)
 
 data <- read_csv(unz("clase-15/data/all.zip", "train.csv"))
 data
@@ -97,3 +98,41 @@ get_rf(3)
 
 
 resultados <- map(x, get_rf)
+resultados
+
+sqrt(x)
+reduce(map(x, sqrt), c)
+
+resultados <- reduce(resultados, bind_rows)
+
+resultados <- resultados %>% 
+  mutate(porc_vars = nvars/max(nvars))
+
+ggplot(resultados) +
+  geom_line(aes(porc_vars, d), color = "red") +
+  geom_point(aes(porc_vars, d), color = "red") +
+  geom_line(aes(porc_vars, v), color = "blue") +
+  geom_point(aes(porc_vars, v), color = "blue") +
+  scale_y_continuous(limits = c(0, 1), labels = percent) +
+  scale_x_continuous(limits = c(0, 1), labels = percent)
+
+
+library(h2o)
+
+h2o.init()
+
+data <- data %>% 
+  select(-muestra)
+
+names(data)
+data2 <- as.h2o(data)
+
+aml <- h2o.automl(y = "label",
+                  training_frame = data2,
+                  max_runtime_secs = 300
+                  )
+
+
+
+
+
