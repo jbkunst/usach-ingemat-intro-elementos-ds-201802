@@ -119,20 +119,23 @@ ggplot(resultados) +
 
 library(h2o)
 
-h2o.init()
+h2o.init(nthreads = 2)
 
 data <- data %>% 
-  select(-muestra)
+  select(-muestra) %>%
+  mutate(
+    label = as.character(label),
+    label = paste0("n", label),
+    label = as.factor(label)
+    )
 
-names(data)
 data2 <- as.h2o(data)
+str(data2)
 
-aml <- h2o.automl(y = "label",
-                  training_frame = data2,
-                  max_runtime_secs = 300
-                  )
-
-
-
-
+aml <- h2o.automl(
+  y = "label", 
+  training_frame = data2,
+  max_runtime_secs = 60*10,
+  sort_metric = "logloss")
+View(aml)
 
