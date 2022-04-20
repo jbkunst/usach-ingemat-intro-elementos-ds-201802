@@ -1,6 +1,6 @@
 library(tidyverse)
-library(DBI)
-library(RMySQL)
+# library(DBI)
+# library(RMySQL)
 
 # LAM nos da su acceso
 con <- dbConnect(
